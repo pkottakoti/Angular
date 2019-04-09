@@ -1,24 +1,50 @@
 import { Injectable } from '@angular/core';
 import { Developer } from './developer';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import {map,catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeveloperService {
-  devs:Developer[]
+ 
+  devs:Developer[];
+  private baseUrl:string="http://54.202.108.54/Home/";
 
-  constructor() { 
-    this.devs = [
-      new Developer(1,"Priyanka","Kottakoti","Java",2013),
-      new Developer(2,"Vineet","Battula","Java",2014),
-      new Developer(3,"Hema","Joshi","Java",2000),
-      new Developer(4,"Suneetha","Atla","Java",2010)
-    ];
+  constructor(private http:HttpClient) { 
+    
+   
+  }
+  addDeveloper(formData: FormData):any {
+    this.http.post(this.baseUrl+"AddDeveloper",formData)
+    .subscribe(res=>{
+      console.log(res);
+      return true},
+      (err)=> {
+      this.handleError(err);
+      return false;
+      });
+  }
+  getDevelopers():Observable<Developer[]>{
+    return this.http.get<Developer[]>(this.baseUrl+"Developers").pipe(
+      map(response=>{
+        this.devs=response;
+        return response;
+      }),
+      catchError(this.handleError<any>())
+    );
   }
 
-  getDevelopers():Developer[]{
-    return this.devs;
+
+  private handleError<T>(result?:T){
+    return (error:any):Observable<T>=>{
+      console.log("Error in DeveloperService: "+error);
+      return null;
+    }
   }
+
+
 
   getDeveloperById(id:number):Developer{
     return this.devs.find(dev=>dev.id==id);

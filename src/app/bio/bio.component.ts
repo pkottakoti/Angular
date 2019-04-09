@@ -13,7 +13,9 @@ export class BioComponent implements OnInit {
   constructor(private developerService:DeveloperService) { }
 
   showDeveloper(){
-    this.devs = this.developerService.getDevelopers();
+    //this.developerService.getDevelopers().subscribe(response=>this.devs=response);
+
+    this.developerService.getDevelopers().subscribe(response=>this.devs=response);
   }
  
   ngOnInit() {
