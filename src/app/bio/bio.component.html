@@ -1,4 +1,4 @@
 <ul *ngFor ="let developer of devs">
-  <li> <a routerLink="/bio/{{developer.id}}">{{developer.lastName | uppercase}},{{developer.firstName}}</a></li>
+  <li> <a routerLink="/bio/{{developer.id}}">{{developer?.lastName | uppercase}},{{developer?.firstName}}</a></li>
  
 </ul>
